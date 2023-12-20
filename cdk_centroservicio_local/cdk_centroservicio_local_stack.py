@@ -133,8 +133,6 @@ class CdkCentroservicioLocalStack(Stack):
                 'phases': {
                     'pre_build': {
                         'commands': [
-                            'echo Logging in to Docker Hub...'
-                            'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
                             'echo Logging in to Amazon ECR...',
                             '$(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)',
                         ]
@@ -395,31 +393,31 @@ class CdkCentroservicioLocalStack(Stack):
         )
 
 #-------Dar Permisos a GITHUB EN PIPELINE---------------------------------------------------------#
+    
         # Crear un Servicio de ECS que use el ALB
-        # ecs_service = ecs.Ec2Service(
-        #     self, "CSService",
-        #     cluster=ecs_cluster,
-        #     task_definition=task_definition,
-        #     service_name='MyECSService'
-        # )
+        ecs_service = ecs.Ec2Service(
+            self, "CSService",
+            cluster=ecs_cluster,
+            task_definition=task_definition,
+            service_name='MyECSService'
+        )
 
 
-#--------------------------------------------------------------------------------------------------#
+#---------------------------Se tiene que eliminar la tarea previamente creada-------------------------------------#
 
-        # # #Definir un Listener
-        # # listener = alb.add_listener('Listener', port=80)      
+        # # Definir un Listener
+        # listener = alb.add_listener('Listener', port=80)      
+        # # Añadir el servicio ECS como un objetivo del Listener
+        # listener.add_targets(
+        #     'ECSTarget',
+        #     port=80,
+        #     targets=[ecs_service.load_balancer_target(
+        #         container_name='backend',
+        #         container_port=8080
+        #     )]
+        # )   
 
-        # # # Añadir el servicio ECS como un objetivo del Listener
-        # # listener.add_targets(
-        # #     'ECSTarget',
-        # #     port=80,
-        # #     targets=[ecs_service.load_balancer_target(
-        # #         container_name='backend',
-        # #         container_port=8080
-        # #     )]
-        # # )   
-
-
+# # # #--------------------------------------------------------------------------------------------------------#
 
 
         
